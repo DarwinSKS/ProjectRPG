@@ -3,23 +3,21 @@ package GestionJoueur;
 import java.util.Scanner;
 
 public class Players extends Classes {
-    private String nom; // Nom de la classe
-    private String nomJoueur; // Nom du joueur
+    private String nomClasse;
+    private String nomJoueur;
 
-    // Constructor
     public Players(String nom, String classeNom, int pv, int pm, int force, int intelligence, int def, int resMagique, int agilite, int chance, int end, int esprit) {
         super(classeNom, pv, pm, force, intelligence, def, resMagique, agilite, chance, end, esprit);
-        this.nom = nom; // Initialisation du nom de la classe
-        this.nomJoueur = nomJoueur; // Initialisation du nom du joueur
+        this.nomClasse = nomClasse;
+        this.nomJoueur = nomJoueur;
     }
 
-    // Getters and setters
     public String getNom() {
-        return nom;
+        return nomClasse;
     }
 
     public void setNom(String nom) {
-        this.nom = nom;
+        this.nomClasse = nomClasse;
     }
 
     public String getNomJoueur() {
@@ -30,7 +28,6 @@ public class Players extends Classes {
         this.nomJoueur = nomJoueur;
     }
 
-    // Choisir un nom de joueur
     public void choisirNomJoueur() {
         Scanner sc = new Scanner(System.in);
 
@@ -38,12 +35,11 @@ public class Players extends Classes {
             System.out.println("Nom : ");
             nomJoueur = sc.nextLine();
 
-            // Vérification de la longueur du nom
             if (nomJoueur.length() < 3 || nomJoueur.length() > 20) {
                 System.out.println("Le nom doit avoir entre 3 et 20 caractères.");
                 continue;
             }
-            // Vérification des caractères autorisés (lettres, chiffres, tirets, underscores)
+
             if (!nomJoueur.matches("[a-zA-Z]+")) {
                 System.out.println("Le nom ne doit contenir que des lettres.");
                 continue;
@@ -53,21 +49,18 @@ public class Players extends Classes {
         }
     }
 
-
-    // Afficher le nom du joueur
     public void afficherNomJoueur() {
         System.out.println("Votre nom : " + nomJoueur);
     }
 
-    // Choisir une classe
     public void choisirUneClasse() {
         System.out.println("Liste des classes: ");
         afficherClasses();
         Scanner sc = new Scanner(System.in);
         System.out.println("Choisir une classe : ");
-        nom = sc.nextLine();
-        if (nom.equals("Guerrier") || nom.equals("Mage") || nom.equals("Voleur")) {
-            selectionnerClasse(nom);
+        nomClasse = sc.nextLine();
+        if (nomClasse.equals("Guerrier") || nomClasse.equals("Mage") || nomClasse.equals("Voleur")) {
+            selectionnerClasse(nomClasse);
         }
         else {
             System.out.println("Classe invalide: ");
