@@ -1,4 +1,4 @@
-package Joueur;
+package GestionJoueur;
 
 public class Classes {
     private String nom; // Nom de la classe
@@ -27,11 +27,56 @@ public class Classes {
         this.esprit = esprit;
     }
 
+    public Classes() {
 
-    public void afficherClasses() {
-        System.out.println("Guerrier");
-        System.out.println("Mage");
-        System.out.println("Voleur");
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public int getPv() {
+        return pv;
+    }
+
+    public int getPm() {
+        return pm;
+    }
+
+    public int getForce() {
+        return force;
+    }
+
+    public int getIntelligence() {
+        return intelligence;
+    }
+
+    public int getDef() {
+        return def;
+    }
+
+    public int getResMagique() {
+        return resMagique;
+    }
+
+    public int getAgilite() {
+        return agilite;
+    }
+
+    public int getChance() {
+        return chance;
+    }
+
+    public int getEnd() {
+        return end;
+    }
+
+    public int getEsprit() {
+        return esprit;
+    }
+
+    public String afficherClasses() {
+        return "Guerrier\nMage\nVoleur\n";
     }
 
     public void afficherDetailClasse() {
@@ -89,6 +134,8 @@ public class Classes {
                 this.end = 7;
                 this.esprit = 6;
                 break;
+            default:
+                throw new IllegalArgumentException("Classe inconnue : " + nom);
         }
     }
 }
