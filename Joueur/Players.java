@@ -32,9 +32,26 @@ public class Players extends Classes {
     // Choisir un nom de joueur
     public void choisirNomJoueur() {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Nom : ");
-        nomJoueur = sc.nextLine();
+
+        while (true) {
+            System.out.println("Nom : ");
+            nomJoueur = sc.nextLine();
+
+            // Vérification de la longueur du nom
+            if (nomJoueur.length() < 3 || nomJoueur.length() > 20) {
+                System.out.println("Le nom doit avoir entre 3 et 20 caractères.");
+                continue;
+            }
+            // Vérification des caractères autorisés (lettres, chiffres, tirets, underscores)
+            if (!nomJoueur.matches("[a-zA-Z]+")) {
+                System.out.println("Le nom ne doit contenir que des lettres.");
+                continue;
+            }
+
+            break;
+        }
     }
+
 
     // Afficher le nom du joueur
     public void afficherNomJoueur() {
