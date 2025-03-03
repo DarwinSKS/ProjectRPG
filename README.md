@@ -1,190 +1,79 @@
-## Déplacement du personnage sur la grille
-### Description générale
-Le jeu se déroule sur une grille bidimensionnelle représentant le donjon que le personnage explore. Le personnage peut se déplacer dans les quatre directions cardinales : Nord, Sud, Est, Ouest. Chaque case de la grille peut contenir différents éléments tels que des monstres, des trésors ou être vide.
-En arrivant sur les bords de cette grille, le joueur change de grille si elle existe, et si il ny'a pas de mur qui bloque le joueur.
+## Projet RPG
+#### Objectif
 
-### Grille
-La grille est définie par des coordonnées (x, y).
-(0, 0) est la position initiale du personnage.
-### Commandes de déplacement
-Le personnage peut recevoir des commandes pour se déplacer :
-
-"N" : se déplacer d'une case vers le Nord.
-"S" : se déplacer d'une case vers le Sud.
-"E" : se déplacer d'une case vers l'Est.
-"O" : se déplacer d'une case vers l'Ouest.
+Les joueurs explorent un donjon généré aléatoirement, affrontent des monstres, et collectent des trésors tout en améliorant leurs compétences. Tout se fait via des commandes textuelles, et chaque tour de jeu permet au joueur de prendre des décisions simples : se déplacer, combattre, ramasser des objets, etc.
 
 
-Commandes résumées
-- "N", "S", "E", "O" : Se déplacer d'une case dans la direction spécifiée.
-- "A" : Avancer d'une case dans la direction actuelle.
-- "G" : Tourner à gauche (changement d'orientation).
-- "D" : Tourner à droite (changement d'orientation).
+### Fonctionnalités de base (pour les premières itérations avec TDD)
+
+1.  **Création du personnage**
+    -   Le joueur commence par créer un personnage avec un nom et des statistiques de base (force, défense, santé, mana, etc.).
+    -   Chaque joueur a un inventaire vide au départ et peut choisir une classe (guerrier, mage, voleur) qui influence ses capacités en combat.
+
+#### Règles d'acceptance :
+
+-   Le joueur doit pouvoir choisir un nom pour son personnage (limité à un certain nombre de caractères).
+-   Les statistiques du personnage sont initialisées en fonction de sa classe (par exemple, le guerrier a plus de santé, le mage plus de mana, etc.).
+
+**Tests** :
+
+1.  **Test de création de personnage valide** : Vérifier que le personnage est bien créé avec un nom et les statistiques associées à la classe choisie.
+2.  **Test de validation du nom** : Assurer que les noms invalides (par exemple, trop courts ou trop longs) ne sont pas acceptés.
+
+2.  **Exploration du donjon**
+    -   Le joueur peut explorer un donjon généré aléatoirement composé de salles interconnectées.
+    -   Chaque salle peut contenir des monstres, des trésors ou être vide.
+    -   Le joueur peut se déplacer vers le nord, sud, est, ou ouest pour changer de salle.
+
+#### Règles d'acceptance :
+
+-   Le donjon est généré avec un certain nombre de salles connectées aléatoirement.
+-   Le joueur peut se déplacer entre les salles en choisissant une direction (nord, sud, est, ouest).
+-   Si une salle contient un monstre, le joueur doit combattre avant de pouvoir se déplacer à nouveau.
+
+**Tests** :
+
+1.  **Test de génération de donjon** : Vérifier que le donjon contient un certain nombre de salles avec des connexions valides entre elles.
+2.  **Test de déplacement** : Assurer que le joueur peut se déplacer dans le donjon et que les mouvements sont bien limités aux directions valides.
+3.  **Test de rencontre avec un monstre** : Vérifier que le joueur est bien obligé d'affronter un monstre avant de quitter une salle qui en contient un.
+  
+3.  **Système de combat**
+    -   Lorsqu'un joueur rencontre un monstre, un combat au tour par tour commence.
+    -   Le joueur peut choisir d'attaquer, se défendre ou utiliser un objet de son inventaire.
+    -   Le monstre attaque à son tour, et le combat continue jusqu'à ce que le joueur ou le monstre soit vaincu.
+
+#### Règles d'acceptance :
+
+-   Le joueur peut attaquer et infliger des dégâts en fonction de ses statistiques et de celles du monstre.
+-   Le monstre riposte automatiquement après chaque tour de jeu.
+-   Si le joueur ou le monstre tombe à 0 points de vie, le combat se termine.
+
+**Tests** :
+
+1.  **Test d'attaque** : Vérifier que le joueur inflige des dégâts corrects au monstre en fonction de ses statistiques.
+2.  **Test de défense** : Vérifier que le joueur peut réduire les dégâts reçus en choisissant de se défendre.
+3.  **Test de victoire/défaite** : Assurer que le combat se termine correctement si le joueur ou le monstre tombe à 0 points de vie.
 
 
-### Règles de déplacement
-Le personnage ne peut pas sortir des limites de la grille.
-Si la case vers laquelle le personnage souhaite se déplacer contient un monstre, il doit le combattre avant de pouvoir entrer dans la case.
-Si le personnage tente de se déplacer dans une direction invalide (hors de la grille), une erreur est retournée.
+4. **Gestion de l'inventaire et des objets**
+
+-   Le joueur peut trouver des objets dans les salles ou après avoir vaincu des monstres (potions de soin, armes, armures, etc.).
+-   Les objets peuvent être utilisés pendant ou hors des combats pour améliorer les statistiques du joueur ou restaurer sa santé.
+
+#### Règles d'acceptance :
+
+-   Le joueur peut ajouter des objets à son inventaire lorsqu'il les trouve.
+-   Les objets consommables (comme les potions) peuvent être utilisés pendant les combats pour restaurer de la santé ou du mana.
+-   Les objets comme les armes et les armures peuvent être équipés pour augmenter les statistiques du personnage.
+
+**Tests** :
+
+1.  **Test d'ajout d'objets à l'inventaire** : Vérifier que les objets trouvés sont correctement ajoutés à l'inventaire du joueur.
+2.  **Test d'utilisation des objets** : Assurer que le joueur peut utiliser des potions pendant le combat et que leurs effets sont bien appliqués.
+3.  **Test d'équipement d'armes/armures** : Vérifier que l'équipement d'objets modifie bien les statistiques du personnage.
 
 
-## Tests d'acceptation pour le déplacement du personnage
-### Test d'acceptation 1 : Déplacement vers une case vide
-Scénario : Le personnage se déplace vers une case adjacente vide.
+# Persistence des données : 
 
-#### Préconditions :
-
-Le personnage est à la position (0, 0).
-La case (0, 1) est vide.
-Actions :
-
-Le joueur entre la commande "N" pour se déplacer vers le Nord.
-Résultat attendu :
-
-Le personnage se déplace à la position (0, 1).
-Un message indique la nouvelle position : "Vous êtes maintenant en position (0, 1)."
-### Test d'acceptation 2 : Déplacement vers une case contenant un monstre
-Scénario : Le personnage tente de se déplacer vers une case contenant un monstre.
-
-#### Préconditions :
-
-Le personnage est à la position (0, 1).
-La case (1, 1) contient un monstre.
-Actions :
-
-Le joueur entre la commande "E" pour se déplacer vers l'Est.
-Résultat attendu :
-
-Le personnage rencontre un monstre.
-Un combat s'engage automatiquement.
-Le personnage ne peut pas se déplacer tant que le monstre n'est pas vaincu.
-Message affiché : "Un monstre bloque votre chemin ! Vous devez le vaincre pour avancer."
-### Test d'acceptation 3 : Tentative de déplacement hors de la grille
-Scénario : Le personnage tente de se déplacer en dehors des limites de la grille.
-
-#### Préconditions :
-
-Le personnage est à la position (0, 0).
-Il n'y a pas de case en position (0, -1).
-Actions :
-
-Le joueur entre la commande "S" pour se déplacer vers le Sud.
-Résultat attendu :
-
-Le déplacement est refusé.
-Un message d'erreur est affiché : "Vous ne pouvez pas aller plus au Sud."
-Le personnage reste à la position (0, 0).
-### Test d'acceptation 4 : Enchaînement de déplacements valides
-Scénario : Le personnage effectue une série de déplacements valides.
-
-#### Préconditions :
-
-Le personnage est à la position (0, 0).
-Les cases (0, 1), (1, 1) et (1, 2) sont vides.
-Actions :
-
-Le joueur entre les commandes : "N", "E", "N".
-Résultat attendu :
-
-Le personnage se déplace successivement aux positions :
-(0, 1)
-(1, 1)
-(1, 2)
-Un message confirme chaque déplacement :
-"Vous êtes maintenant en position (0, 1)."
-
-### Test d'acceptation 5 : Rencontre d'un trésor lors du déplacement
-Scénario : Le personnage se déplace vers une case contenant un trésor.
-
-#### Préconditions :
-
-Le personnage est à la position (1, 2).
-La case (1, 3) contient un trésor.
-Actions :
-
-Le joueur entre la commande "N" pour se déplacer vers le Nord.
-Résultat attendu :
-
-Le personnage se déplace à la position (1, 3).
-Un message indique la découverte du trésor : "Vous avez trouvé un trésor !"
-Le trésor est ajouté à l'inventaire du personnage.
-## Test d'acceptation 6 : Déplacement bloqué par un obstacle
-Scénario : Le personnage tente de se déplacer vers une case bloquée par un obstacle infranchissable.
-
-#### Préconditions :
-
-Le personnage est à la position (1, 3).
-La case (2, 3) est bloquée par un obstacle (mur).
-Actions :
-
-Le joueur entre la commande "E" pour se déplacer vers l'Est.
-Résultat attendu :
-
-Le déplacement est refusé.
-Un message indique : "Un obstacle vous bloque le passage. Vous ne pouvez pas aller par là."
-Le personnage reste à la position (1, 3).
-## Test d'acceptation 7 : Gestion des limites de la grille
-Scénario : Le personnage atteint le bord de la grille et ne peut pas aller plus loin.
-
-#### Préconditions :
-
-La grille est de taille (5 x 5).
-Le personnage est à la position (0, 4).
-Actions :
-
-Le joueur entre la commande "N" pour se déplacer vers le Nord.
-Résultat attendu :
-
-Le déplacement est refusé.
-Un message indique : "Vous avez atteint le bord du monde. Vous ne pouvez pas aller plus au Nord."
-Le personnage reste à la position (0, 4).
-## Test d'acceptation 8 : Rotation et orientation du personnage
-Scénario : Le personnage change d'orientation sans se déplacer.
-
-#### Préconditions :
-
-Le personnage est à la position (2, 2).
-Par défaut, le personnage fait face au Nord.
-Actions :
-
-Le joueur entre la commande "D" pour tourner à droite (Est).
-Le joueur entre la commande "G" pour tourner à gauche (retour au Nord).
-Résultat attendu :
-
-L'orientation du personnage change sans déplacement.
-Messages indiquant l'orientation :
-"Vous faites maintenant face à l'Est."
-"Vous faites maintenant face au Nord."
-
-### Test d'acceptation 9 : Déplacement avec orientation
-Scénario : Le personnage avance dans la direction où il est orienté.
-
-#### Préconditions :
-
-Le personnage est à la position (2, 2), orienté vers l'Est.
-Actions :
-
-Le joueur entre la commande "A" pour avancer d'une case dans la direction actuelle.
-Résultat attendu :
-
-Le personnage se déplace à la position (3, 2).
-Un message confirme le déplacement : "Vous avancez vers l'Est et êtes maintenant en position (3, 2)."
-
-### Test d'acceptation 10 : Série de commandes complexes
-Scénario : Le personnage exécute une série de commandes mixtes.
-
-#### Préconditions :
-
-Le personnage est à la position (0, 0), orienté vers le Nord.
-Actions :
-
-Le joueur entre la séquence de commandes : "A", "D", "A", "G", "A", "A".
-Résultat attendu :
-
-- Étape 1 : Avancer vers le Nord à (0, 1).
-- Étape 2 : Tourner à droite vers l'Est.
-- Étape 3 : Avancer vers l'Est à (1, 1).
-- Étape 4 : Tourner à gauche vers le Nord.
-- Étape 5 : Avancer vers le Nord à (1, 2).
-- Étape 6 : Avancer vers le Nord à (1, 3).
-Messages confirment chaque action et position.
+L'état de la partie doit être persistée (sur boutons / commande ou en automatique)
+La persistence peut être faite de n'importe quelle façon (bdd, fichier ...) Sauf du inMemory, je dois être capable de retrouver ma sauvegarde après redémarrage
